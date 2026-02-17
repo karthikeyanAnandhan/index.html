@@ -1,76 +1,109 @@
-# index.html
-<!DOCTYPE html>
-<html lang="ta">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hotel Food Search</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            padding: 20px;
-        }
-        input {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            box-sizing: border-box;
-        }
-        ul {
-            list-style-type: none;
-            padding: 0;
-        }
-        li {
-            padding: 10px;
-            border-bottom: 1px solid #ccc;
-        }
-    </style>
-</head>
-<body>
+<style>
+    /* CSS: டிசைன் பகுதிகள் */
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+    }
 
-    <h1>Hotel Food Search</h1>
-    <input type="text" id="search" placeholder="உங்கள் உணவை தேடுங்கள்...">
+    .card {
+        background: white;
+        padding: 30px;
+        border-radius: 20px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        text-align: center;
+        width: 90%;
+        max-width: 400px;
+    }
+
+    h1 { color: #e67e22; margin-bottom: 10px; }
+    p { color: #7f8c8d; margin-bottom: 25px; }
+
+    .input-group {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    input {
+        padding: 12px;
+        border: 2px solid #ddd;
+        border-radius: 10px;
+        font-size: 16px;
+        outline: none;
+        transition: 0.3s;
+    }
+
+    input:focus { border-color: #e67e22; }
+
+    button {
+        padding: 12px;
+        background-color: #e67e22;
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    button:hover { background-color: #d35400; transform: scale(1.02); }
+
+    #result {
+        margin-top: 25px;
+        padding: 15px;
+        border-radius: 10px;
+        font-weight: bold;
+        display: none; /* ஆரம்பத்தில் மறைத்து வைக்கப்படும் */
+    }
+
+    .available { background-color: #d4edda; color: #155724; display: block !important; }
+    .not-available { background-color: #f8d7da; color: #721c24; display: block !important; }
+</style>
+<div class="card">
+    <h1>சுவை உணவகம் 🍲</h1>
+    <p>உங்களுக்கு வேண்டிய உணவு இருக்கிறதா?</p>
     
-    <ul id="food-list">
-        <li>சாம்பார் ரைஸ்</li>
-        <li>பிரியாணி</li>
-        <li>சிட்டி சாப்பாடு</li>
-        <li>போன்்டா</li>
-        <li>மீன் குழம்பு</li>
-        <li>சிக்கன் கிரேவி</li>
-    </ul>
+    <div class="input-group">
+        <input type="text" id="foodSearch" placeholder="உதாரணம்: Biryani, Dosa...">
+        <button onclick="checkAvailability()">தேடுக (Search)</button>
+    </div>
 
-    <script>
-        const searchInput = document.getElementById('search');
-        const foodList = document.getElementById('food-list').getElementsByTagName('li');
+    <div id="result"></div>
+</div>
 
-        searchInput.addEventListener('keyup', function() {
-            let filter = searchInput.value.toLowerCase();
-            for (let i = 0; i < foodList.length; i++) {
-                let foodItem = foodList[i].textContent.toLowerCase();
-                if (foodItem.includes(filter)) {
-                    foodList[i].style.display = "";
-                } else {
-                    foodList[i].style.display = "none";
-                }
-            }
-        });
-    </script>
+<script>
+    // JavaScript: உணவுகளை சரிபார்க்கும் பகுதி
+    
+    // உங்கள் ஹோட்டல் மெனு பட்டியல் (இங்கே நீங்கள் உணவுகளைச் சேர்க்கலாம்)
+    const hotelMenu = [
+        "Biryani", "Chicken Rice", "Dosa", "Idli", 
+        "Parotta", "Pongal", "Omelette", "Meals", "Chapati"
+    ];
 
-</body>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Website</title>
-    <script>
-        function showAlert() {
-            alert('Button clicked! Hello from JavaScript!');
+    function checkAvailability() {
+        const userInput = document.getElementById("foodSearch").value.trim();
+        const resultBox = document.getElementById("result");
+
+        if (userInput === "") {
+            alert("தயவுசெய்து ஏதாவது ஒரு உணவின் பெயரை உள்ளிடவும்!");
+            return;
         }
-    </script>
-</head>
-<body>
-    <h1>Welcome to My Website</h1>
-    <button onclick="showAlert()">Click Me!</button>
-</html>
+
+        // மெனுவில் இருக்கிறதா என தேடுதல் (பெரிய/சிறிய எழுத்து வித்தியாசம் இன்றி)
+        const found = hotelMenu.find(item => item.toLowerCase() === userInput.toLowerCase());
+
+        if (found) {
+            resultBox.innerHTML = `✅ மகிழ்ச்சி! <b>${found}</b> எங்களிடம் தயாராக உள்ளது.`;
+            resultBox.className = "available";
+        } else {
+            resultBox.innerHTML = `❌ மன்னிக்கவும்! <b>${userInput}</b> தற்போது எங்களிடம் இல்லை.`;
+            resultBox.className = "not-available";
+        }
+    }
+</script>
