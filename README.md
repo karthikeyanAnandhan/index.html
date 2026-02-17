@@ -58,4 +58,20 @@
     </script>
 
 </body>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Website</title>
+    <script>
+        function showAlert() {
+            alert('Button clicked! Hello from JavaScript!');
+        }
+    </script>
+</head>
+<body>
+    <h1>Welcome to My Website</h1>
+    <button onclick="showAlert()">Click Me!</button>
+</body>
 </html>
